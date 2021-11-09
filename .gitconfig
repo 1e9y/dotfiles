@@ -1,0 +1,36 @@
+[user]
+	name = V K
+	email = 84337571+1e9y@users.noreply.github.com
+	signingkey = 8FD3CBC011E30C75
+
+[github]
+	user = 1e9y
+
+[init]
+	defaultBranch = main
+
+[commit]
+	gpgsign = true
+
+[pull]
+	rebase = true
+
+[push]
+  default = simple
+
+[color]
+	ui = auto
+
+[alias]
+	s = status
+	d = diff
+	b = branch
+	c = commit
+	cm = commit -m
+	co = checkout
+	go = checkout -B
+
+	tags = tag --list
+	branches = branch --all
+	remotes = remote --verbose
+

@@ -1,3 +1,6 @@
+# Use English language
+set --export LANG en_US.utf-8
+
 # Empty the welcome message
 set fish_greeting
 

@@ -1,0 +1,37 @@
+# GUI apps and other casks. CLI tools live in Brewfile
+
+# Install apps to ~/Applications and refuse casks without a checksum
+cask_args appdir: "~/Applications", require_sha: true
+
+## Security
+
+# GnuPG + pinentry for signing git commits
+cask "gpg-suite-no-mail"
+# Password manager
+cask "bitwarden"
+
+## Development
+
+# GPU-accelerated terminal
+cask "ghostty"
+# Code editor
+cask "zed"
+# Docker containers and Linux VMs, lightweight Docker Desktop alternative
+cask "orbstack"
+# Google Cloud SDK (gcloud, gsutil)
+cask "gcloud-cli"
+# Firefox for developers
+cask "firefox@developer-edition"
+# API client, Postman alternative that stores collections as plain files in git
+cask "bruno"
+
+## Communication
+
+# Work chat
+cask "slack"
+# Messenger
+cask "telegram"
+# Voice and text chat
+cask "discord"
+# Notes and docs workspace
+cask "notion"

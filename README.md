@@ -103,10 +103,27 @@ Commits are signed with the YubiKey SSH key `~/.ssh/id_yubikey_1.pub` through ss
 
 ### Local and corporate settings
 
-Put work email, company-only rules and anything else that must not be pushed in `~/.config/git/local`. `git/config` includes it last, so it overrides the repo settings. For example, to sign every commit in company repos:
+Put work email, company-only rules and anything else that must not be pushed in `~/.config/git/local`. `git/config` includes it last, so it overrides the repo settings.
+
+Example: use a work email and sign every commit, but only in repos cloned from the company's GitHub org (`acme` here). Two files, both outside the repo:
 
 ```ini
 # ~/.config/git/local
-[includeIf "hasconfig:remote.*.url:git@github.com:my-company/**"]
-	path = ~/.config/git/my-company
+# Applies ~/.config/git/acme in any repo with a remote in github.com/acme
+[includeIf "hasconfig:remote.*.url:git@github.com:acme/**"]
+	path = ~/.config/git/acme
+[includeIf "hasconfig:remote.*.url:https://github.com/acme/**"]
+	path = ~/.config/git/acme
 ```
+
+```ini
+# ~/.config/git/acme
+[user]
+	email = me@acme.com
+	signingkey = ~/.ssh/id_yubikey_1.pub
+[commit]
+	gpgsign = true
+```
+
+Check it from inside a company repo: `git config --show-origin user.email` should print the `acme` file.
+To match by folder instead of remote, use `[includeIf "gitdir:~/Code/acme/"]`.

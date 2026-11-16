@@ -86,3 +86,27 @@ They live outside the repo, so they can't be committed by accident.
 # ~/.config/fish/local.d/work.fish
 set -gx VAULT_ADDR https://vault.example.com
 ```
+
+## Git on a new Mac
+
+Link the config and the global ignore list into `~/.config/git` (run from the repo root):
+
+```sh
+mkdir -p ~/.config/git
+ln -sf "$PWD/git/config" ~/.config/git/config
+ln -sf "$PWD/git/ignore" ~/.config/git/ignore
+```
+
+`~/.gitconfig` must not exist: git reads it after `~/.config/git/config`, so it would override the repo settings.
+
+Commits are signed with the YubiKey SSH key `~/.ssh/id_yubikey_1.pub` through ssh-agent (started by `config.fish`).
+
+### Local and corporate settings
+
+Put work email, company-only rules and anything else that must not be pushed in `~/.config/git/local`. `git/config` includes it last, so it overrides the repo settings. For example, to sign every commit in company repos:
+
+```ini
+# ~/.config/git/local
+[includeIf "hasconfig:remote.*.url:git@github.com:my-company/**"]
+	path = ~/.config/git/my-company
+```

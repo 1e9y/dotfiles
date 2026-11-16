@@ -1,0 +1,73 @@
+# Git config. Symlinked to ~/.config/git/config
+# Machine-specific and corporate settings go in ~/.config/git/local (never committed)
+
+[user]
+	name = V K
+	email = 84337571+1e9y@users.noreply.github.com
+	# YubiKey FIDO2 key, signs through ssh-agent
+	signingkey = ~/.ssh/id_yubikey_1.pub
+
+[gpg]
+	format = ssh
+
+[push]
+	autoSetupRemote = true
+
+[fetch]
+	# Delete local copies of branches removed on the remote
+	prune = true
+
+[rebase]
+	# Rebase with uncommitted changes: stash before, unstash after
+	autoStash = true
+	# Keep stacked branches pointing at the rebased commits
+	updateRefs = true
+
+[merge]
+	# Conflicts also show the original text, not only both sides
+	conflictStyle = zdiff3
+
+[diff]
+	# Cleaner diffs for moved and reordered code
+	algorithm = histogram
+	# Color moved lines differently from changed ones
+	colorMoved = default
+
+[rerere]
+	# Remember how a conflict was resolved and reuse it next time
+	enabled = true
+
+[branch]
+	# Most recently committed branches first
+	sort = -committerdate
+
+[tag]
+	# Version order: v1.10 after v1.9
+	sort = version:refname
+
+[help]
+	# On a typo, offer to run the command you probably meant
+	autocorrect = prompt
+
+[commit]
+	# Show the diff in the commit message editor
+	verbose = true
+
+# Git LFS: large files stored outside the repo (git-lfs is in the Brewfile)
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+# GitHub HTTPS auth through the gh CLI
+[credential "https://github.com"]
+	helper =
+	helper = !$HOME/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !$HOME/homebrew/bin/gh auth git-credential
+
+# Last, so local settings win. Git skips it if the file doesn't exist
+[include]
+	path = ~/.config/git/local

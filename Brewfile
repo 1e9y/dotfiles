@@ -29,6 +29,8 @@ brew "jq"
 brew "yq"
 # GitHub CLI: PRs, issues, Actions from the terminal
 brew "gh"
+# Git extension for large files (Git LFS repos)
+brew "git-lfs"
 # Task runner for project `justfile`s
 brew "just"
 # Fuzzy finder for files, history, anything piped in

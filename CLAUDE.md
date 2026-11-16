@@ -2,13 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Personal macOS dotfiles. No build, lint, or test tooling, and no install script: setup is manual, per the README (fish files are symlinked, the rest copied).
+Personal macOS dotfiles. No build, lint, or test tooling, and no install script: setup is manual, per the README (fish and git files are symlinked, the rest copied).
 
 ## Layout → destination
 
 | Repo path | Lives at |
 |-----------|----------|
-| `.gitconfig` | `~/.gitconfig` (GPG-signed commits, `pull.rebase = true`, short aliases like `s`, `cm`, `go`) |
+| `git/config`, `git/ignore` | symlinked into `~/.config/git/` (`~/.gitconfig` must not exist, or it overrides them) |
 | `.gnupg/gpg.conf` | `~/.gnupg/gpg.conf` |
 | `fish/config.fish`, `fish/fish_plugins` | symlinked into `~/.config/fish/` |
 | `Brewfile` | CLI formulae, used with `brew bundle --file=Brewfile` |
@@ -50,6 +50,12 @@ Personal macOS dotfiles. No build, lint, or test tooling, and no install script:
 - Corporate/private settings (tokens, internal URLs like `VAULT_ADDR`) go in `~/.config/fish/local.d/*.fish`, sourced last. Never put them in `config.fish`.
 - `fish/fish_plugins` holds only plugin names: fisher rewrites the file on install/update and drops comments. Describe plugins in the README's Plugins table instead, and keep that table in sync.
 - Test changes without touching the live shell: point `XDG_CONFIG_HOME` at a scratch dir whose `fish/config.fish` is a symlink to the repo file, then run `env -i HOME=$HOME PATH=/usr/bin:/bin TERM=xterm XDG_CONFIG_HOME=<dir> ~/homebrew/bin/fish -c '…'`. `fish --no-config` is not enough: it skips the startup code that applies `fish_add_path -g`. Syntax only: `fish -n fish/config.fish`.
+
+## Git
+
+- `git/config` is the global config. Corporate and machine-specific settings (work email, `includeIf` blocks for company repos, extra signing rules) go in `~/.config/git/local`, which `git/config` includes last. Never put company names, internal hosts or work emails in `git/config`.
+- Use `~/` or `$HOME` instead of `/Users/<name>` paths: the username differs between Macs.
+- Test without touching the live config: make a scratch dir with `.config/git/config` symlinked to the repo file, then run `env -i HOME=<dir> PATH=/usr/bin:/bin git config --global --list --show-origin`.
 
 ## Conventions
 

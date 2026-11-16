@@ -47,3 +47,42 @@ To check later that everything in both files is installed:
 brew bundle check --file=Brewfile
 brew bundle check --file=Brewfile.casks
 ```
+
+## Fish on a new Mac
+
+Do this after Homebrew (fish comes from the `Brewfile`). Run it from the repo root.
+
+1. Link the config and the plugin list into `~/.config/fish`:
+
+   ```sh
+   mkdir -p ~/.config/fish
+   ln -sf "$PWD/fish/config.fish" ~/.config/fish/config.fish
+   ln -sf "$PWD/fish/fish_plugins" ~/.config/fish/fish_plugins
+   ```
+
+2. Install fisher, then the plugins from `fish_plugins`:
+
+   ```sh
+   fish -c 'curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher update'
+   ```
+
+### Plugins
+
+Managed by [fisher](https://github.com/jorgebucaran/fisher). Add or remove with `fisher install <plugin>` / `fisher remove <plugin>`: fisher rewrites `fish_plugins` itself (comments there would be lost, so they're described here).
+
+| Plugin | What it does |
+|---|---|
+| `jorgebucaran/fisher` | The plugin manager itself |
+| `PatrickF1/fzf.fish` | fzf key bindings: search history (Ctrl+R), files (Ctrl+Alt+F), git log/status, processes, variables |
+| `edc/bass` | Runs bash scripts and keeps their environment changes: `bass source script.sh` |
+
+### Local and corporate settings
+
+Anything that must not be pushed (company endpoints, tokens, work-only tools) goes in `~/.config/fish/local.d/*.fish`.
+`config.fish` sources these files last, in name order, so they can use everything set up before them and override it.
+They live outside the repo, so they can't be committed by accident.
+
+```fish
+# ~/.config/fish/local.d/work.fish
+set -gx VAULT_ADDR https://vault.example.com
+```

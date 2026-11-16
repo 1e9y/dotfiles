@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Personal macOS dotfiles. No build, lint, or test tooling, and no install/symlink script: files are copied to their home locations by hand (`~/.config/fish` and `~/.gitconfig` are plain files, not symlinks to this repo).
+Personal macOS dotfiles. No build, lint, or test tooling, and no install script: setup is manual, per the README (fish files are symlinked, the rest copied).
 
 ## Layout → destination
 
@@ -10,7 +10,7 @@ Personal macOS dotfiles. No build, lint, or test tooling, and no install/symlink
 |-----------|----------|
 | `.gitconfig` | `~/.gitconfig` (GPG-signed commits, `pull.rebase = true`, short aliases like `s`, `cm`, `go`) |
 | `.gnupg/gpg.conf` | `~/.gnupg/gpg.conf` |
-| `fish/` | `~/.config/fish/` |
+| `fish/config.fish`, `fish/fish_plugins` | symlinked into `~/.config/fish/` |
 | `Brewfile` | CLI formulae, used with `brew bundle --file=Brewfile` |
 | `Brewfile.casks` | GUI apps (casks), used with `brew bundle --file=Brewfile.casks` |
 | `.homebrew/brew.env` | `~/.homebrew/brew.env`: Homebrew settings for every shell (`KEY=value` per line, no quotes) |
@@ -44,9 +44,12 @@ Personal macOS dotfiles. No build, lint, or test tooling, and no install/symlink
 
 ## Fish
 
-- `fish/config.fish` is the only hand-written fish file. Homebrew is expected at `~/homebrew/bin/brew` (non-standard prefix), casks install to `~/Applications`.
-- Everything else under `fish/functions`, `fish/conf.d`, `fish/completions` is vendored by the **fisher** plugin manager from `fish/fish_plugins` (fisher, nvm.fish, autopair.fish, tide@v5, z, bass). Don't edit those files; change `fish_plugins` and run `fisher update`.
-- `fish/fish_variables` is fish's auto-generated universal-variable store (includes tide prompt config and fisher bookkeeping with absolute home paths). Don't hand-edit.
+- Deployed as symlinks: `~/.config/fish/config.fish` → `fish/config.fish`, `~/.config/fish/fish_plugins` → `fish/fish_plugins` (setup steps in README). Everything else in `~/.config/fish` (plugin files, completions, `fish_variables`, `conf.d/fish_frozen_*`) is machine state: never add it to the repo.
+- `fish/config.fish` sections, in order: Environment → Programming environments → Infrastructure → Interactive shell → Local settings. Guard optional tools with `type -q <tool>; and …` or `test -f`, so a fresh Mac doesn't error before everything is installed.
+- PATH: `fish_add_path -g` prepends via `fish_user_paths`, which always sits **before** `$PATH`, even with `-a`. For anything that must come after the version-manager shims (nodenv's global npm bin, OrbStack), use `fish_add_path -aP`.
+- Corporate/private settings (tokens, internal URLs like `VAULT_ADDR`) go in `~/.config/fish/local.d/*.fish`, sourced last. Never put them in `config.fish`.
+- `fish/fish_plugins` holds only plugin names: fisher rewrites the file on install/update and drops comments. Describe plugins in the README's Plugins table instead, and keep that table in sync.
+- Test changes without touching the live shell: point `XDG_CONFIG_HOME` at a scratch dir whose `fish/config.fish` is a symlink to the repo file, then run `env -i HOME=$HOME PATH=/usr/bin:/bin TERM=xterm XDG_CONFIG_HOME=<dir> ~/homebrew/bin/fish -c '…'`. `fish --no-config` is not enough: it skips the startup code that applies `fish_add_path -g`. Syntax only: `fish -n fish/config.fish`.
 
 ## Conventions
 

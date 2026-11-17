@@ -131,7 +131,7 @@ To match by folder instead of remote, use `[includeIf "gitdir:~/Code/acme/"]`.
 ## Claude Code on a new Mac
 
 `claude/` holds how I work with AI, for Claude Code and Codex: global instructions, skills, agents, commands and a settings baseline. See [claude/README.md](claude/README.md) for the catalog.
-The approach borrows from [trailofbits/claude-code-config](https://github.com/trailofbits/claude-code-config) (settings baseline, secret-file deny rules) and [citypaul/.dotfiles](https://github.com/citypaul/.dotfiles) (repo mirrors `~/.claude`, documented skills and agents).
+The approach borrows from [trailofbits/claude-code-config](https://github.com/trailofbits/claude-code-config) (settings baseline, secret-file deny rules) and [citypaul/.dotfiles](https://github.com/citypaul/.dotfiles) (repo mirrors `~/.claude`, documented skills and agents). The engineering rules in `claude/CLAUDE.md` follow [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills).
 
 Install, and rerun after any change in `claude/`:
 

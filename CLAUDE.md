@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Personal macOS dotfiles. No build, lint, or test tooling, and no install script: setup is manual, per the README (fish and git files are symlinked, the rest copied).
+Personal macOS dotfiles. No build, lint, or test tooling, and no install script: setup is manual, per the README (fish, git and Claude instruction files are symlinked; Claude settings are merged; the rest copied).
 
 ## Layout → destination
 
@@ -14,6 +14,7 @@ Personal macOS dotfiles. No build, lint, or test tooling, and no install script:
 | `Brewfile` | CLI formulae, used with `brew bundle --file=Brewfile` |
 | `Brewfile.casks` | GUI apps (casks), used with `brew bundle --file=Brewfile.casks` |
 | `.homebrew/brew.env` | `~/.homebrew/brew.env`: Homebrew settings for every shell (`KEY=value` per line, no quotes) |
+| `claude/` | installed by `sh claude/install.sh`: `CLAUDE.md` → `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`; skills → `~/.claude/skills/` and `~/.agents/skills/` (Codex); agents, commands, rules → `~/.claude/`; all per-item symlinks. `settings.json` merged, never linked |
 
 ## Brewfile
 
@@ -56,6 +57,14 @@ Personal macOS dotfiles. No build, lint, or test tooling, and no install script:
 - `git/config` is the global config. Corporate and machine-specific settings (work email, `includeIf` blocks for company repos, extra signing rules) go in `~/.config/git/local`, which `git/config` includes last. Never put company names, internal hosts or work emails in `git/config`.
 - Use `~/` or `$HOME` instead of `/Users/<name>` paths: the username differs between Macs.
 - Test without touching the live config: make a scratch dir with `.config/git/config` symlinked to the repo file, then run `env -i HOME=<dir> PATH=/usr/bin:/bin git config --global --list --show-origin`.
+
+## Claude Code
+
+- `claude/` is the user's AI methodology: it mirrors `~/.claude`. When adding a skill, agent, command or rule, put it there in the right folder (skills as `<name>/SKILL.md`), add it to the catalog in `claude/README.md`, and keep that catalog in sync on removal.
+- Third-party skills are copied in whole, with their `LICENSE`, and the catalog links the exact upstream commit.
+- The repo is public and `~/.claude/settings.json` holds work `autoMode` rules that Claude Code rewrites itself. So `claude/settings.json` is a personal baseline merged into the live file, never a symlink. Don't copy keys from the live file into it without checking they're not work-related.
+- Work-only skills, rules and settings stay directly in `~/.claude`, never in `claude/`.
+- Skills are shared with Codex, so keep them tool-neutral: no `!` command injection or `$ARGUMENTS`. Copied third-party skills stay unchanged.
 
 ## Conventions
 

@@ -127,3 +127,28 @@ Example: use a work email and sign every commit, but only in repos cloned from t
 
 Check it from inside a company repo: `git config --show-origin user.email` should print the `acme` file.
 To match by folder instead of remote, use `[includeIf "gitdir:~/Code/acme/"]`.
+
+## Claude Code on a new Mac
+
+`claude/` holds how I work with AI, for Claude Code and Codex: global instructions, skills, agents, commands and a settings baseline. See [claude/README.md](claude/README.md) for the catalog.
+The approach borrows from [trailofbits/claude-code-config](https://github.com/trailofbits/claude-code-config) (settings baseline, secret-file deny rules) and [citypaul/.dotfiles](https://github.com/citypaul/.dotfiles) (repo mirrors `~/.claude`, documented skills and agents).
+
+Install, and rerun after any change in `claude/`:
+
+```sh
+sh claude/install.sh
+```
+
+- `CLAUDE.md` becomes `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`, and every skill, agent, command and rule a symlink into the repo. Skills are also linked into `~/.agents/skills/`, where Codex finds them. Each item is linked on its own, so work-only items and Claude's own files next to them stay untouched. A real file in the way is renamed to `<name>.bak.<timestamp>`.
+- `settings.json` is merged into `~/.claude/settings.json`, not linked: Claude Code writes to that file itself, and work settings live in it too. Objects merge key by key, lists keep existing entries, and keys only in the live file are left alone. The previous file is kept as `settings.json.bak`.
+
+
+### Local and corporate settings
+
+Nothing work-related goes in `claude/`. Keep it on the machine instead:
+
+- **Instructions:** `~/.claude/rules/*.md`. Claude Code loads every file there in every project.
+- **Settings** (`autoMode` rules, company plugin marketplaces): directly in `~/.claude/settings.json`. `autoMode` can only be set in user or managed settings, so it can't move to a project file.
+- **Skills and commands:** directly in `~/.claude/skills/` and `~/.claude/commands/`.
+
+Never track `~/.claude.json` (account, MCP servers), `~/.claude/projects/`, `sessions/`, `plugins/` or `skills/synced/`: they're Claude Code's own state.

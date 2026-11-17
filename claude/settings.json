@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "enableAllProjectMcpServers": false,
+  "permissions": {
+    "deny": [
+      "Read(~/.ssh/**)",
+      "Edit(~/.ssh/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.config/gh/**)",
+      "Read(~/.git-credentials)",
+      "Read(~/.docker/config.json)",
+      "Read(~/.kube/**)",
+      "Read(~/.oci/**)",
+      "Read(~/.config/gcloud/**)",
+      "Read(~/.vault-token)",
+      "Read(~/.npmrc)",
+      "Read(~/.codex/auth.json)",
+      "Read(~/.config/fish/local.d/**)",
+      "Read(~/Library/Keychains/**)"
+    ]
+  },
+  "extraKnownMarketplaces": {
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "trailofbits": {
+      "source": {
+        "source": "github",
+        "repo": "trailofbits/skills"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "ponytail@ponytail": true,
+    "security-guidance@claude-plugins-official": true,
+    "second-opinion@trailofbits": true
+  }
+}
